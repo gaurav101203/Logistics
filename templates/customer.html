@@ -1,0 +1,801 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Logistics Management</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'your_app/css/style4.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 200; /* Added 'px' units */
+            background-image: url('{% static 'images/back.jpg' %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed; /* Fix the background image */
+        }
+        .container {
+            display: flex;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        .form {
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 40px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            margin: 20px;
+            flex: 0 0 calc(50% - 40px);
+            max-width: calc(50% - 40px);
+            text-align: center;
+        }
+        header h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+        header p {
+            font-size: 18px;
+            line-height: 1.6;
+        }
+        .content .container {
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+        h2 {
+            color: black;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        label {
+            font-size: 18px;
+            margin-top: 5px;
+            display: block;
+        }
+        input[type="text"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        button {
+            background-color: #4CAF50;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 100%;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        p {
+            margin-top: 20px;
+            font-size: 16px;
+            color: black;
+        }
+        footer p {
+            font-size: 16px;
+            margin-left: 500px;
+        }
+        /* Add or adjust any necessary styles here */
+        .feature-img {
+            display: block;
+            margin: 0 auto 10px; /* Adjust margin as needed */
+            max-width: 60px; /* Adjust max-width for logo size */
+            height: auto;
+        }
+        .title h1 {
+            margin-top: 40px;
+            font-size: 24px;
+        }
+        footer {
+            background-color:white;
+            color: black;
+            background-color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            padding: 20px;
+        }
+        .navbar {
+            background-color: rgba(255, 255, 255, 0.5); /* Semi-transparent white background */
+            backdrop-filter: blur(10px); /* Apply a blur effect to the background */
+            padding: 20px 0;
+        }
+        .logo {
+            max-width: 80px; /* Adjust the maximum width of the logo */
+            height: auto;
+            margin-right: 10px;
+        }
+        .heading {
+            font-family: 'Kaushan Script', cursive;
+            margin-right: 120px;
+            padding: 0;
+            font-size: 28px; /* Adjust the font size of the heading */
+            text-align: center; /* Align the text in the center */
+            flex: 1; /* Allow the heading to grow and take up remaining space */
+        }
+        .chat-bar-collapsible {
+            position: fixed;
+            bottom: 20px;
+            right: 0px;
+            /* box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2); */
+            left: 0px;
+        }
+        
+        .collapsible {
+            background-color: transparent; /* Set background color to transparent */
+            border: none; /* Remove border */
+            outline: none;
+            cursor: pointer;
+            transition: color 0.3s; /* Add transition for smooth hover effect */
+            width: 100px;
+            left: 50px;
+        }
+        
+        .collapsible:hover {
+            color: #4CAF50; /* Change color on hover */
+        }
+        
+        .collapsible i {
+            font-size: 50px; /* Adjust the size of the chat icon */
+        }
+        
+        .content1 {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.2s ease-out;
+            background-color: #f1f1f1;
+            max-width: 350px;
+        }
+        
+        .full-chat-block {
+            width: 350px;
+            background: white;
+            text-align: center;
+            overflow: auto;
+            scrollbar-width: none;
+            height: max-content;
+            transition: max-height 0.2s ease-out;
+            /* padding-right: 100px; */
+        }
+        
+        .outer-container {
+            min-height: 500px;
+            bottom: 0%;
+            position: relative;
+        }
+        
+        .chat-container {
+            max-height: 500px;
+            width: 100%;
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            scroll-behavior: smooth;
+            hyphens: auto;
+        }
+        
+        .chat-container::-webkit-scrollbar {
+            display: none;
+        }
+        
+        .chat-bar-input-block {
+            display: flex;
+            float: left;
+            box-sizing: border-box;
+            justify-content: space-between;
+            width: 100%;
+            align-items: center;
+            background-color: rgb(235, 235, 235);
+            border-radius: 10px 10px 0px 0px;
+            padding: 10px 0px 10px 10px;
+        }
+        
+        .chat-bar-icons {
+            display: flex;
+            justify-content: space-evenly;
+            box-sizing: border-box;
+            width: 25%;
+            float: right;
+            font-size: 20px;
+        }
+        
+        #chat-icon:hover {
+            opacity: .7;
+        }
+        
+        /* Chat bubbles */
+        
+        #userInput {
+            width: 75%;
+        }
+        
+        .input-box {
+            float: left;
+            border: none;
+            box-sizing: border-box;
+            width: 100%;
+            border-radius: 10px;
+            padding: 10px;
+            font-size: 16px;
+            color: #000;
+            background-color: white;
+            outline: none
+        }
+        
+        .userText {
+            color: white;
+            font-family: Helvetica;
+            font-size: 16px;
+            font-weight: normal;
+            text-align: right;
+            clear: both;
+        }
+        
+        .userText span {
+            line-height: 1.5em;
+            display: inline-block;
+            background: #5ca6fa;
+            padding: 10px;
+            border-radius: 8px;
+            border-bottom-right-radius: 2px;
+            max-width: 80%;
+            margin-right: 10px;
+            animation: floatup .5s forwards
+        }
+        
+        .botText {
+            color: #000;
+            font-family: Helvetica;
+            font-weight: normal;
+            font-size: 16px;
+            text-align: left;
+        }
+        
+        .botText span {
+            line-height: 1.5em;
+            display: inline-block;
+            background: #e0e0e0;
+            padding: 10px;
+            border-radius: 8px;
+            border-bottom-left-radius: 2px;
+            max-width: 80%;
+            margin-left: 10px;
+            animation: floatup .5s forwards
+        }
+        #sendButton {
+            height: 42px; /* Adjust height as needed */
+            width: 80px; /* Adjust width as needed */
+            margin-left: 10px; /* Adjust the margin as needed */
+            margin-bottom:7px;
+            margin-right:10px;
+        }
+        
+        
+        
+        @keyframes floatup {
+            from {
+                transform: translateY(14px);
+                opacity: .0;
+            }
+            to {
+                transform: translateY(0px);
+                opacity: 1;
+            }
+        }
+        
+        @media screen and (max-width:600px) {
+            .full-chat-block {
+                width: 100%;
+                border-radius: 0px;
+            }
+            .chat-bar-collapsible {
+                position: fixed;
+                bottom: 0;
+                right: 0;
+                width: 100%;
+            }
+            .collapsible {
+                width: 100%;
+                border: 0px;
+                border-top: 3px solid white;
+                border-radius: 0px;
+            }
+            .chatbot-icon {
+                width: 10px;
+                height: 10px;
+            }
+            
+            }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <div class="container">
+            <img src="{% static 'images/Expresso.png' %}" alt="Logo" class="logo">
+            <h1 class="logo">Expresso</h1>
+        </div>
+    </nav>
+
+    <section class="content">
+        <div class="container">
+            <div id="locationForm" class="form">
+                <img src="{% static 'images/location.jpg' %}" alt="Create Shipment" class="feature-img">
+                <h2>Check Shipment Location</h2>
+                <label for="shipmentIdLocation">Shipment ID:</label>
+                <input type="text" id="shipmentIdLocation" placeholder="Enter Shipment ID" required>
+                <button type="button" onclick="getShipmentLocation()">Check Location</button>
+                <p id="locationMessage"></p>
+            </div>
+    
+            <div id="statusForm" class="form">
+                <img src="{% static 'images/status.jpg' %}" alt="Create Shipment" class="feature-img">
+                <h2>Check Shipment Status</h2>
+                <label for="shipmentIdStatus">Shipment ID:</label>
+                <input type="text" id="shipmentIdStatus" placeholder="Enter Shipment ID" required>
+                <button type="button" onclick="getShipmentStatus()">Check Status</button>
+                <p id="statusMessage"></p>
+            </div>
+        </div>
+    </section>
+    <!-- CHAT BAR BLOCK -->
+    <div class="chat-bar-collapsible">
+        <button id="chat-button" type="button" class="collapsible align-right">
+            <!-- Use the correct Font Awesome class for the chat icon -->
+            <img src="{% static 'images/chatbot.png' %}" alt="Chatbot Icon" style="width: 50px; height: 50px;">        </button>
+    
+        <div class="content1">
+            <div class="full-chat-block">
+                <!-- Message Container -->
+                <div class="outer-container">
+                    <div class="chat-container">
+                        <!-- Messages -->
+                        <div id="chatbox">
+                            <h5 id="chat-timestamp"></h5>
+                            <p id="botStarterMessage" class="botText"><span>Loading...</span></p>
+                        </div>
+    
+<!-- User input box -->
+<div class="chat-bar-input-block">
+    <div id="userInput">
+        <input id="textInput" class="input-box" type="text" name="msg"
+            placeholder="Tap 'Enter' to send a message">
+        <p></p>
+    </div>
+    <!-- Send button -->
+    <button id="sendButton" onclick="getResponse()">Send</button>
+</div>
+
+    
+                        
+                        </div>
+    
+                        <div id="chat-bar-bottom">
+                            <p></p>
+                        </div>
+    
+                    </div>
+                </div>
+    
+            </div>
+        </div>
+    
+    </div>
+<script>// Collapsible
+    var coll = document.getElementsByClassName("collapsible");
+    
+    for (let i = 0; i < coll.length; i++) {
+        coll[i].addEventListener("click", function () {
+            this.classList.toggle("active");
+    
+            var content = this.nextElementSibling;
+    
+            if (content.style.maxHeight) {
+                content.style.maxHeight = null;
+            } else {
+                content.style.maxHeight = content.scrollHeight + "px";
+            }
+    
+        });
+    }
+    
+    function getTime() {
+        let today = new Date();
+        hours = today.getHours();
+        minutes = today.getMinutes();
+    
+        if (hours < 10) {
+            hours = "0" + hours;
+        }
+    
+        if (minutes < 10) {
+            minutes = "0" + minutes;
+        }
+    
+        let time = hours + ":" + minutes;
+        return time;
+    }
+    
+    // Gets the first message
+    function firstBotMessage() {
+        let firstMessage = "Hey!!How's it going?"
+    
+        document.getElementById("botStarterMessage").innerHTML = '<p class="botText"><span>' + firstMessage +'</span></p>' ;
+    
+        let time = getTime();
+    
+        $("#chat-timestamp").append(time);
+        document.getElementById("userInput").scrollIntoView(false);
+    }
+    
+    firstBotMessage();
+    
+    // Retrieves the response
+    function getHardResponse(userText) {
+        let botResponse = getBotResponse(userText);
+        let botHtml = '<p class="botText"><span>' + botResponse + '</span></p>';
+        $("#chatbox").append(botHtml);
+    
+        document.getElementById("chat-bar-bottom").scrollIntoView(true);
+    }
+    
+    //Gets the text text from the input box and processes it
+    function getResponse() {
+        let userText = $("#textInput").val();
+    
+        if (userText == "") {
+            userText = "I love Code Palace!";
+        }
+    
+        let userHtml = '<p class="userText"><span>' + userText + '</span></p>';
+    
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document.getElementById("chat-bar-bottom").scrollIntoView(true);
+    
+        setTimeout(() => {
+            getHardResponse(userText);
+        }, 1000)
+    
+    }
+    
+    // Handles sending text via button clicks
+    function buttonSendText(sampleText) {
+        let userHtml = '<p class="userText"><span>' + sampleText + '</span></p>';
+    
+        $("#textInput").val("");
+        $("#chatbox").append(userHtml);
+        document.getElementById("chat-bar-bottom").scrollIntoView(true);
+    
+        //Uncomment this if you want the bot to respond to this buttonSendText event
+        // setTimeout(() => {
+        //     getHardResponse(sampleText);
+        // }, 1000)
+    }
+    
+    // Define event listeners for button clicks
+    function sendButton() {
+        getResponse();
+    }
+    
+    function heartButton() {
+        buttonSendText("Heart clicked!");
+    }
+    
+    // Attach event listener to text input field for key press events
+document.getElementById("textInput").addEventListener("keypress", function (e) {
+    // Check if the pressed key is the Enter key (key code 13)
+    if (e.keyCode === 13 || e.which === 13) {
+        // Prevent the default behavior of the Enter key
+        e.preventDefault();
+        // Call getResponse() function to handle user input
+        getResponse();
+    }
+});
+
+
+
+</script>
+<script>
+    
+    
+    
+    
+    function getBotResponse(input) {
+
+    // Simple responses
+    if (input == "hello" || input == "hey" || input == "hi"){
+        return "Hello there! I am Expresso's Bot assistant and I am here to help you.";
+    } else if (input == "how are you" || input == "How are you?" || input == "how are you?" || input == "How are you"){
+        return "I am fine , what about you?"
+    } else if (input == "goodbye") {
+        return "Talk to you later!";
+    } else if (input == 1){
+        return "Gaurav Yadav <br> Aayush Vishwakarma <br> Smit Gawand <br> Ayush Mishra";
+    } else if (input == 2){ 
+        return "We are India's largest fully integrated logistics provider. We aim to build the operating system for commerce, through a combination of world-class infrastructure, logistics operations of the highest quality and cutting-edge engineering and technology capabilities."
+    } else if (input == 3){ 
+        return "Email ID : yadavgaurav101203@gmail.com <br> Customer Care No. : 1800-586-489";
+    
+    }    else if (input == "i am good" || input == "I'm good" ){
+         return " Nice! How can I help you?";
+    } else {
+        return "Welcome to Expresso Help Desk. How we may assist you? Type the numbers from the below options. <br> 1.To know the creators of this project. <br> 2.If you want to know more about our Company. <br>  3.If you want to contact us directly.";
+    }
+}</script>
+
+<footer>
+    <div class="container">
+        <p>&copy; 2024 Logistics Management</p>
+    </div>
+</footer>
+
+<!-- Include Web3 library -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.6/web3.min.js"></script>
+<script>
+    // Initialize Web3
+    let web3;
+
+    async function initWeb3() {
+        if (typeof window.ethereum !== 'undefined') {
+            web3 = new Web3(window.ethereum);
+            try {
+                // Request account access
+                await window.ethereum.enable();
+            } catch (error) {
+                console.error('User denied account access');
+            }
+        } else {
+            console.error('No web3 provider detected. You should consider using MetaMask.');
+        }
+    }
+    const contractAddress = '0xff77e3911b7297202ef65ea0a3fbe424b69d94d7';
+    const contractABI =[
+    {
+        "anonymous": false,
+        "inputs": [
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "shipmentId",
+                "type": "uint256"
+            },
+            {
+                "indexed": false,
+                "internalType": "uint256",
+                "name": "deliveryTimestamp",
+                "type": "uint256"
+            }
+        ],
+        "name": "ShipmentDelivered",
+        "type": "event"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_shipmentId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "address",
+                "name": "_carrier",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "_recipient",
+                "type": "address"
+            }
+        ],
+        "name": "createShipment",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_shipmentId",
+                "type": "uint256"
+            }
+        ],
+        "name": "deliverShipment",
+        "outputs": [],
+        "stateMutability": "payable",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_shipmentId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getShipmentLocation",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_shipmentId",
+                "type": "uint256"
+            }
+        ],
+        "name": "getShipmentStatus",
+        "outputs": [
+            {
+                "internalType": "bool",
+                "name": "delivered",
+                "type": "bool"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "shipmentLocations",
+        "outputs": [
+            {
+                "internalType": "string",
+                "name": "",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "",
+                "type": "uint256"
+            }
+        ],
+        "name": "shipments",
+        "outputs": [
+            {
+                "internalType": "address",
+                "name": "sender",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "carrier",
+                "type": "address"
+            },
+            {
+                "internalType": "address",
+                "name": "recipient",
+                "type": "address"
+            },
+            {
+                "internalType": "bool",
+                "name": "delivered",
+                "type": "bool"
+            },
+            {
+                "internalType": "string",
+                "name": "currentLocation",
+                "type": "string"
+            }
+        ],
+        "stateMutability": "view",
+        "type": "function"
+    },
+    {
+        "inputs": [
+            {
+                "internalType": "uint256",
+                "name": "_shipmentId",
+                "type": "uint256"
+            },
+            {
+                "internalType": "string",
+                "name": "_newLocation",
+                "type": "string"
+            }
+        ],
+        "name": "updateShipmentLocation",
+        "outputs": [],
+        "stateMutability": "nonpayable",
+        "type": "function"
+    }
+]
+    let logisticsContract;
+
+    async function initContract() {
+        logisticsContract = new web3.eth.Contract(contractABI, contractAddress);
+    }
+
+    async function getShipmentLocation() {
+        const shipmentId = document.getElementById('shipmentIdLocation').value;
+    
+        try {
+            const status = await logisticsContract.methods.getShipmentStatus(shipmentId).call();
+            if (status) {
+                // If the shipment is delivered, get the recipient's address
+                const shipmentInfo = await logisticsContract.methods.shipments(shipmentId).call();
+                const recipientAddress = shipmentInfo.recipient;
+                alert('Recipient address: ' + recipientAddress);
+            } else {
+                // If the shipment is not delivered, get the current location
+                const location = await logisticsContract.methods.getShipmentLocation(shipmentId).call();
+                alert('Shipment location: ' + location);
+            }
+        } catch (error) {
+            alert('Error getting shipment location: ' + error.message);
+            console.error('Error getting shipment location:', error);
+        }
+    }
+    
+
+// Implementation for getting shipment status
+async function getShipmentStatus() {
+    // Get the shipment ID from the input field
+    const shipmentId = document.getElementById('shipmentIdStatus').value;
+
+    try {
+        const status = await logisticsContract.methods.getShipmentStatus(shipmentId).call();
+    
+        const shipmentStatus = status ? 'Delivered' : 'In transit';
+    
+        // Display the shipment status to the user
+        alert('Shipment status: ' + shipmentStatus);
+        console.log('Shipment status:', shipmentStatus);
+    } catch (error) {
+        alert('Error getting shipment status: ' + error.message);
+        console.error('Error getting shipment status:', error);
+    }
+}
+// Attach event listener to text input field for key press events
+document.getElementById("textInput").addEventListener("keypress", function (e) {
+    // Check if the pressed key is the Enter key (key code 13)
+    if (e.keyCode === 13 || e.which === 13) {
+        // Prevent the default behavior of the Enter key
+        e.preventDefault();
+        // Call getResponse() function to handle user input
+        getResponse();
+    }
+});
+
+
+window.onload = async function () {
+    await initWeb3();
+    await initContract();
+};
+</script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/web3/1.3.6/web3.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</body>
+</html>
